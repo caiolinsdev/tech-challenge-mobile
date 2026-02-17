@@ -229,9 +229,7 @@ Após rodar o seed, use essas credenciais para testar:
 
 ## 👥 Equipe
 
-- **[Nome]** - RM: XXXXX
-- **[Nome]** - RM: XXXXX
-- **[Nome]** - RM: XXXXX
+- **[Caio Lins Magno Ferreira]** - RM: 365814
 
 ---
 
