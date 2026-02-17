@@ -43,6 +43,7 @@ export type MainTabParamList = {
 export type HomeStackParamList = {
   Home: undefined;
   PostDetail: { id: string };
+  CreatePost: undefined;
 };
 
 export type ProfileStackParamList = {
@@ -131,6 +132,13 @@ function HomeStackNavigator() {
         component={PostDetailScreen}
         options={{
           title: 'Post',
+        }}
+      />
+      <HomeStackNav.Screen
+        name="CreatePost"
+        component={CreatePostScreen}
+        options={{
+          title: 'Novo Post',
         }}
       />
     </HomeStackNav.Navigator>

@@ -26,6 +26,7 @@ import { typography } from '../theme/typography';
 type HomeScreenNavigationProp = NativeStackNavigationProp<{
   Home: undefined;
   PostDetail: { id: string };
+  CreatePost: undefined;
 }>;
 
 // ==========================================
@@ -54,7 +55,7 @@ export function HomeScreen() {
   };
 
   const handleCreatePost = () => {
-    (navigation.getParent() as any)?.navigate('ProfileStack', { screen: 'AdminPosts' });
+    navigation.navigate('CreatePost');
   };
 
   // Loading inicial
