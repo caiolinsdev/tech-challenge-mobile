@@ -1,0 +1,83 @@
+// ==========================================
+// Prisma Schema - Blog Database
+// ==========================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==========================================
+// Enums
+// ==========================================
+
+enum Role {
+  PROFESSOR
+  STUDENT
+}
+
+// ==========================================
+// Models
+// ==========================================
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  professor Professor?
+  student   Student?
+
+  @@map("users")
+}
+
+model Professor {
+  id        String   @id @default(uuid())
+  userId    String   @unique @map("user_id")
+  bio       String?
+  subject   String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  posts Post[]
+
+  @@map("professors")
+}
+
+model Student {
+  id         String   @id @default(uuid())
+  userId     String   @unique @map("user_id")
+  enrollment String?
+  grade      String?
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("students")
+}
+
+model Post {
+  id          String   @id @default(uuid())
+  title       String
+  content     String
+  description String?
+  published   Boolean  @default(true)
+  authorId    String   @map("author_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  author Professor @relation(fields: [authorId], references: [id])
+
+  @@map("posts")
+}
+
