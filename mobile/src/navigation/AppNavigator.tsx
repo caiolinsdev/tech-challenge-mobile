@@ -18,6 +18,9 @@ import { EditProfessorScreen } from '../screens/EditProfessorScreen';
 import { AdminPostsScreen } from '../screens/AdminPostsScreen';
 import { CreatePostScreen } from '../screens/CreatePostScreen';
 import { EditPostScreen } from '../screens/EditPostScreen';
+import { StudentsScreen } from '../screens/StudentsScreen';
+import { CreateStudentScreen } from '../screens/CreateStudentScreen';
+import { EditStudentScreen } from '../screens/EditStudentScreen';
 
 // ==========================================
 // Tipos de Navegação
@@ -60,6 +63,15 @@ export type ProfileStackParamList = {
     email: string;
     bio: string | null;
     subject: string | null;
+  };
+  Students: undefined;
+  CreateStudent: undefined;
+  EditStudent: {
+    id: string;
+    name: string;
+    email: string;
+    enrollment: string | null;
+    grade: string | null;
   };
 };
 
@@ -189,6 +201,27 @@ function ProfileStackNavigator() {
         component={EditProfessorScreen}
         options={{
           title: 'Editar Professor',
+        }}
+      />
+      <ProfileStackNav.Screen
+        name="Students"
+        component={StudentsScreen}
+        options={{
+          title: 'Estudantes',
+        }}
+      />
+      <ProfileStackNav.Screen
+        name="CreateStudent"
+        component={CreateStudentScreen}
+        options={{
+          title: 'Novo Estudante',
+        }}
+      />
+      <ProfileStackNav.Screen
+        name="EditStudent"
+        component={EditStudentScreen}
+        options={{
+          title: 'Editar Estudante',
         }}
       />
     </ProfileStackNav.Navigator>

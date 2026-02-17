@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { authRoutes } from './auth.routes';
 import { postsRoutes } from './posts.routes';
 import { professorsRoutes } from './professors.routes';
+import { studentsRoutes } from './students.routes';
 
 const routes = Router();
 
@@ -52,9 +53,7 @@ routes.get('/', (req, res) => {
 routes.use('/auth', authRoutes);
 routes.use('/posts', postsRoutes);
 routes.use('/professors', professorsRoutes);
-
-// TODO: Adicionar nas próximas waves
-// routes.use('/students', studentRoutes);
+routes.use('/students', studentsRoutes);
 
 export { routes };
 

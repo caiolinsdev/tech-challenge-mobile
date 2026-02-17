@@ -109,7 +109,10 @@ export function ProfileScreen() {
               <Text style={styles.menuArrow}>›</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.menuItem}>
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={() => navigation.navigate('Students')}
+            >
               <Text style={styles.menuIcon}>🎓</Text>
               <Text style={styles.menuItemText}>Gerenciar Estudantes</Text>
               <Text style={styles.menuArrow}>›</Text>
