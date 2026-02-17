@@ -1,0 +1,139 @@
+# ==========================================
+# TECH CHALLENGE - GITIGNORE
+# ==========================================
+
+# ==========================================
+# Dependencies
+# ==========================================
+node_modules/
+.pnp/
+.pnp.js
+
+# ==========================================
+# Build outputs
+# ==========================================
+dist/
+build/
+*.tsbuildinfo
+
+# ==========================================
+# Environment variables
+# ==========================================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+
+# ==========================================
+# Logs
+# ==========================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# ==========================================
+# OS files
+# ==========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ==========================================
+# IDE / Editor
+# ==========================================
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+
+# ==========================================
+# Expo / React Native
+# ==========================================
+.expo/
+.expo-shared/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+
+# Android
+*.apk
+*.aab
+android/app/build/
+android/.gradle/
+android/build/
+android/app/debug/
+android/app/release/
+
+# iOS
+*.ipa
+ios/Pods/
+ios/build/
+ios/*.xcworkspace
+!ios/*.xcworkspace/contents.xcworkspacedata
+ios/*.xcodeproj/*
+!ios/*.xcodeproj/project.pbxproj
+!ios/*.xcodeproj/xcshareddata/
+!ios/*.xcodeproj/xcshareddata/xcschemes/
+*.xcuserstate
+
+# ==========================================
+# Testing
+# ==========================================
+coverage/
+.nyc_output/
+*.lcov
+
+# ==========================================
+# Docker
+# ==========================================
+# Don't ignore Dockerfile and docker-compose.yml
+
+# ==========================================
+# Prisma
+# ==========================================
+# Keep schema.prisma but ignore generated client
+# prisma/migrations is tracked for version control
+
+# ==========================================
+# Temporary files
+# ==========================================
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# ==========================================
+# Package locks (keep one, ignore others)
+# ==========================================
+# Keep package-lock.json or yarn.lock, not both
+# yarn.lock
+# pnpm-lock.yaml
+
+# ==========================================
+# Miscellaneous
+# ==========================================
+*.pem
+.cache/
+.parcel-cache/
+.turbo/
