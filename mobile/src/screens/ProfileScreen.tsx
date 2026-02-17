@@ -8,17 +8,27 @@ import {
   ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { useAuth } from '../contexts/AuthContext';
 import { colors } from '../theme/colors';
 import { spacing, borderRadius } from '../theme/spacing';
 import { typography } from '../theme/typography';
+import { ProfileStackParamList } from '../navigation/AppNavigator';
+
+// ==========================================
+// Tipos
+// ==========================================
+
+type ProfileScreenNavigationProp = NativeStackNavigationProp<ProfileStackParamList, 'Profile'>;
 
 // ==========================================
 // Screen
 // ==========================================
 
 export function ProfileScreen() {
+  const navigation = useNavigation<ProfileScreenNavigationProp>();
   const { user, signOut, isProfessor } = useAuth();
 
   const handleLogout = () => {
@@ -87,7 +97,10 @@ export function ProfileScreen() {
               <Text style={styles.menuArrow}>›</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.menuItem}>
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={() => navigation.navigate('Professors')}
+            >
               <Text style={styles.menuIcon}>👨‍🏫</Text>
               <Text style={styles.menuItemText}>Gerenciar Professores</Text>
               <Text style={styles.menuArrow}>›</Text>

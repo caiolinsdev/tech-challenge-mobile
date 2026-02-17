@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActivityIndicator, View, StyleSheet } from 'react-native';
+import { ActivityIndicator, View, Text, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -12,6 +12,9 @@ import { LoginScreen } from '../screens/LoginScreen';
 import { HomeScreen } from '../screens/HomeScreen';
 import { PostDetailScreen } from '../screens/PostDetailScreen';
 import { ProfileScreen } from '../screens/ProfileScreen';
+import { ProfessorsScreen } from '../screens/ProfessorsScreen';
+import { CreateProfessorScreen } from '../screens/CreateProfessorScreen';
+import { EditProfessorScreen } from '../screens/EditProfessorScreen';
 
 // ==========================================
 // Tipos de Navegação
@@ -28,12 +31,25 @@ export type AuthStackParamList = {
 
 export type MainTabParamList = {
   HomeStack: undefined;
-  Profile: undefined;
+  ProfileStack: undefined;
 };
 
 export type HomeStackParamList = {
   Home: undefined;
   PostDetail: { id: string };
+};
+
+export type ProfileStackParamList = {
+  Profile: undefined;
+  Professors: undefined;
+  CreateProfessor: undefined;
+  EditProfessor: {
+    id: string;
+    name: string;
+    email: string;
+    bio: string | null;
+    subject: string | null;
+  };
 };
 
 // ==========================================
@@ -43,7 +59,8 @@ export type HomeStackParamList = {
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 const MainTab = createBottomTabNavigator<MainTabParamList>();
-const HomeStack = createNativeStackNavigator<HomeStackParamList>();
+const HomeStackNav = createNativeStackNavigator<HomeStackParamList>();
+const ProfileStackNav = createNativeStackNavigator<ProfileStackParamList>();
 
 // ==========================================
 // Auth Navigator
@@ -68,7 +85,7 @@ function AuthNavigator() {
 
 function HomeStackNavigator() {
   return (
-    <HomeStack.Navigator
+    <HomeStackNav.Navigator
       screenOptions={{
         headerStyle: {
           backgroundColor: colors.background.secondary,
@@ -79,21 +96,70 @@ function HomeStackNavigator() {
         },
       }}
     >
-      <HomeStack.Screen
+      <HomeStackNav.Screen
         name="Home"
         component={HomeScreen}
         options={{
           title: 'Posts',
         }}
       />
-      <HomeStack.Screen
+      <HomeStackNav.Screen
         name="PostDetail"
         component={PostDetailScreen}
         options={{
           title: 'Post',
         }}
       />
-    </HomeStack.Navigator>
+    </HomeStackNav.Navigator>
+  );
+}
+
+// ==========================================
+// Profile Stack Navigator
+// ==========================================
+
+function ProfileStackNavigator() {
+  return (
+    <ProfileStackNav.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: colors.background.secondary,
+        },
+        headerTintColor: colors.text.primary,
+        headerTitleStyle: {
+          fontWeight: '600',
+        },
+      }}
+    >
+      <ProfileStackNav.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          title: 'Perfil',
+        }}
+      />
+      <ProfileStackNav.Screen
+        name="Professors"
+        component={ProfessorsScreen}
+        options={{
+          title: 'Professores',
+        }}
+      />
+      <ProfileStackNav.Screen
+        name="CreateProfessor"
+        component={CreateProfessorScreen}
+        options={{
+          title: 'Novo Professor',
+        }}
+      />
+      <ProfileStackNav.Screen
+        name="EditProfessor"
+        component={EditProfessorScreen}
+        options={{
+          title: 'Editar Professor',
+        }}
+      />
+    </ProfileStackNav.Navigator>
   );
 }
 
@@ -120,28 +186,19 @@ function MainNavigator() {
         options={{
           title: 'Posts',
           tabBarLabel: 'Posts',
-          tabBarIcon: ({ color }) => (
-            <View style={styles.tabIcon}>
-              <View style={[styles.iconPlaceholder, { backgroundColor: color }]} />
-            </View>
+          tabBarIcon: () => (
+            <Text style={styles.tabIconEmoji}>📝</Text>
           ),
         }}
       />
       <MainTab.Screen
-        name="Profile"
-        component={ProfileScreen}
+        name="ProfileStack"
+        component={ProfileStackNavigator}
         options={{
           title: 'Perfil',
           tabBarLabel: 'Perfil',
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: colors.background.secondary,
-          },
-          headerTintColor: colors.text.primary,
-          tabBarIcon: ({ color }) => (
-            <View style={styles.tabIcon}>
-              <View style={[styles.iconPlaceholder, { backgroundColor: color }]} />
-            </View>
+          tabBarIcon: () => (
+            <Text style={styles.tabIconEmoji}>👤</Text>
           ),
         }}
       />
@@ -192,6 +249,9 @@ const styles = StyleSheet.create({
   tabIcon: {
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  tabIconEmoji: {
+    fontSize: 22,
   },
   iconPlaceholder: {
     width: 20,
