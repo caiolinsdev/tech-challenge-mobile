@@ -54,8 +54,7 @@ export function HomeScreen() {
   };
 
   const handleCreatePost = () => {
-    // TODO: Wave 4 - Navegar para criar post
-    console.log('Criar novo post');
+    (navigation.getParent() as any)?.navigate('ProfileStack', { screen: 'AdminPosts' });
   };
 
   // Loading inicial
@@ -115,6 +114,12 @@ export function HomeScreen() {
           isLoadingMore && hasMore ? <LoadingMore /> : null
         }
       />
+
+      {isProfessor && (
+        <TouchableOpacity style={styles.fab} onPress={handleCreatePost}>
+          <Text style={styles.fabIcon}>+</Text>
+        </TouchableOpacity>
+      )}
     </SafeAreaView>
   );
 }

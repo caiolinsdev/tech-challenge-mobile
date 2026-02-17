@@ -11,6 +11,8 @@
 - [Executando o Projeto](#-executando-o-projeto)
 - [Estrutura do Projeto](#-estrutura-do-projeto)
 - [API Endpoints](#-api-endpoints)
+- [Credenciais de Teste](#-credenciais-de-teste)
+- [Documentação](#-documentação)
 - [Equipe](#-equipe)
 
 ---
@@ -83,17 +85,24 @@ cp .env.example .env
 docker-compose up -d
 ```
 
-### 4. Instalar dependências e rodar migrations
+### 4. Rodar migrations e seed
 
 ```bash
-# Backend
+# Com Docker rodando, execute dentro do container da API:
+docker compose exec api npx prisma migrate dev
+docker compose exec api npx prisma db seed
+
+# Ou, se estiver rodando o backend localmente:
 cd backend
 npm install
 npx prisma migrate dev
 npx prisma db seed
+```
 
-# Mobile
-cd ../mobile
+### 5. Instalar dependências do mobile
+
+```bash
+cd mobile
 npm install
 ```
 
@@ -104,24 +113,23 @@ npm install
 ### Com Docker (Recomendado)
 
 ```bash
-# Subir todo o ambiente
-docker-compose up
+# Subir banco e API
+docker compose up postgres api
 
-# O PostgreSQL estará disponível na porta 5432
-# A API estará disponível em http://localhost:3000
+# PostgreSQL: porta 5432
+# API: http://localhost:3000
 ```
 
-### Sem Docker (Desenvolvimento)
+### Mobile (local)
+
+O app mobile roda **fora do Docker** para melhor integração com emuladores:
 
 ```bash
-# Terminal 1 - Backend
-cd backend
-npm run dev
-
-# Terminal 2 - Mobile
 cd mobile
 npx expo start
 ```
+
+**Celular físico:** Configure o IP do seu PC em `mobile/app.json` (`extra.apiUrl`). Exemplo: `http://192.168.1.100:3000`. Use `ipconfig getifaddr en0` (Mac) para descobrir seu IP.
 
 ---
 
@@ -131,12 +139,11 @@ npx expo start
 tech-challenge-mobile/
 ├── backend/                 # API Node.js
 │   ├── src/
-│   │   ├── controllers/     # Controladores
-│   │   ├── services/        # Lógica de negócio
-│   │   ├── repositories/    # Acesso a dados
-│   │   ├── middlewares/     # Middlewares Express
+│   │   ├── controllers/     # Controladores (validação Zod)
+│   │   ├── services/        # Lógica de negócio + Prisma
+│   │   ├── middlewares/     # Auth, autorização, erro
 │   │   ├── routes/          # Rotas da API
-│   │   ├── utils/           # Utilitários
+│   │   ├── utils/           # Prisma, JWT, password
 │   │   └── app.ts           # Entry point
 │   ├── prisma/              # Schema e migrations
 │   ├── Dockerfile
@@ -175,24 +182,27 @@ tech-challenge-mobile/
 | Método | Endpoint | Descrição |
 |--------|----------|-----------|
 | GET | `/api/posts` | Listar posts |
-| GET | `/api/posts/:id` | Detalhes do post |
 | GET | `/api/posts/search` | Buscar posts |
-| POST | `/api/posts` | Criar post |
-| PUT | `/api/posts/:id` | Editar post |
-| DELETE | `/api/posts/:id` | Excluir post |
+| GET | `/api/posts/mine` | Meus posts (professor) |
+| GET | `/api/posts/:id` | Detalhes do post |
+| POST | `/api/posts` | Criar post (professor) |
+| PUT | `/api/posts/:id` | Editar post (professor) |
+| DELETE | `/api/posts/:id` | Excluir post (professor) |
 
-### Professores
+### Professores (apenas professor)
 | Método | Endpoint | Descrição |
 |--------|----------|-----------|
 | GET | `/api/professors` | Listar professores |
+| GET | `/api/professors/:id` | Detalhes do professor |
 | POST | `/api/professors` | Criar professor |
 | PUT | `/api/professors/:id` | Editar professor |
 | DELETE | `/api/professors/:id` | Excluir professor |
 
-### Estudantes
+### Estudantes (apenas professor)
 | Método | Endpoint | Descrição |
 |--------|----------|-----------|
 | GET | `/api/students` | Listar estudantes |
+| GET | `/api/students/:id` | Detalhes do estudante |
 | POST | `/api/students` | Criar estudante |
 | PUT | `/api/students/:id` | Editar estudante |
 | DELETE | `/api/students/:id` | Excluir estudante |
@@ -210,11 +220,30 @@ Após rodar o seed, use essas credenciais para testar:
 
 ---
 
+## 📚 Documentação
+
+- [Arquitetura do Sistema](docs/ARCHITECTURE.md)
+- [Desafios Técnicos](docs/CHALLENGES.md)
+
+---
+
 ## 👥 Equipe
 
 - **[Nome]** - RM: XXXXX
 - **[Nome]** - RM: XXXXX
 - **[Nome]** - RM: XXXXX
+
+---
+
+## 📱 Screenshots
+
+_Adicione screenshots das telas principais aqui._
+
+---
+
+## 🎥 Vídeo de Apresentação
+
+_Vídeo de demonstração (máx. 15 min) a ser gravado pela equipe._
 
 ---
 
