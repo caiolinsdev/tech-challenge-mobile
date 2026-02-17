@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { authRoutes } from './auth.routes';
 
 const routes = Router();
 
@@ -43,15 +44,12 @@ routes.get('/', (req, res) => {
 });
 
 // ==========================================
-// TODO: Importar rotas específicas
+// Rotas da API
 // ==========================================
 
-// import authRoutes from './auth.routes';
-// import postRoutes from './posts.routes';
-// import professorRoutes from './professors.routes';
-// import studentRoutes from './students.routes';
+routes.use('/auth', authRoutes);
 
-// routes.use('/auth', authRoutes);
+// TODO: Adicionar nas próximas waves
 // routes.use('/posts', postRoutes);
 // routes.use('/professors', professorRoutes);
 // routes.use('/students', studentRoutes);
