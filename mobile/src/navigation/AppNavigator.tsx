@@ -15,6 +15,9 @@ import { ProfileScreen } from '../screens/ProfileScreen';
 import { ProfessorsScreen } from '../screens/ProfessorsScreen';
 import { CreateProfessorScreen } from '../screens/CreateProfessorScreen';
 import { EditProfessorScreen } from '../screens/EditProfessorScreen';
+import { AdminPostsScreen } from '../screens/AdminPostsScreen';
+import { CreatePostScreen } from '../screens/CreatePostScreen';
+import { EditPostScreen } from '../screens/EditPostScreen';
 
 // ==========================================
 // Tipos de Navegação
@@ -41,6 +44,14 @@ export type HomeStackParamList = {
 
 export type ProfileStackParamList = {
   Profile: undefined;
+  AdminPosts: undefined;
+  CreatePost: undefined;
+  EditPost: {
+    id: string;
+    title: string;
+    content: string;
+    description: string | null;
+  };
   Professors: undefined;
   CreateProfessor: undefined;
   EditProfessor: {
@@ -136,6 +147,27 @@ function ProfileStackNavigator() {
         component={ProfileScreen}
         options={{
           title: 'Perfil',
+        }}
+      />
+      <ProfileStackNav.Screen
+        name="AdminPosts"
+        component={AdminPostsScreen}
+        options={{
+          title: 'Gerenciar Posts',
+        }}
+      />
+      <ProfileStackNav.Screen
+        name="CreatePost"
+        component={CreatePostScreen}
+        options={{
+          title: 'Novo Post',
+        }}
+      />
+      <ProfileStackNav.Screen
+        name="EditPost"
+        component={EditPostScreen}
+        options={{
+          title: 'Editar Post',
         }}
       />
       <ProfileStackNav.Screen

@@ -115,13 +115,6 @@ export function HomeScreen() {
           isLoadingMore && hasMore ? <LoadingMore /> : null
         }
       />
-
-      {/* FAB - Apenas para professores */}
-      {isProfessor && (
-        <TouchableOpacity style={styles.fab} onPress={handleCreatePost}>
-          <Text style={styles.fabIcon}>+</Text>
-        </TouchableOpacity>
-      )}
     </SafeAreaView>
   );
 }

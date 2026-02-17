@@ -91,7 +91,10 @@ export function ProfileScreen() {
           <View style={styles.menuSection}>
             <Text style={styles.menuTitle}>Administração</Text>
             
-            <TouchableOpacity style={styles.menuItem}>
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={() => navigation.navigate('AdminPosts')}
+            >
               <Text style={styles.menuIcon}>📝</Text>
               <Text style={styles.menuItemText}>Gerenciar Posts</Text>
               <Text style={styles.menuArrow}>›</Text>

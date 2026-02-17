@@ -9,4 +9,7 @@ export { ProfileScreen } from './ProfileScreen';
 export { ProfessorsScreen } from './ProfessorsScreen';
 export { CreateProfessorScreen } from './CreateProfessorScreen';
 export { EditProfessorScreen } from './EditProfessorScreen';
+export { AdminPostsScreen } from './AdminPostsScreen';
+export { CreatePostScreen } from './CreatePostScreen';
+export { EditPostScreen } from './EditPostScreen';
 
