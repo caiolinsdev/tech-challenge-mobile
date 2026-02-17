@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { authRoutes } from './auth.routes';
+import { postsRoutes } from './posts.routes';
 
 const routes = Router();
 
@@ -48,9 +49,9 @@ routes.get('/', (req, res) => {
 // ==========================================
 
 routes.use('/auth', authRoutes);
+routes.use('/posts', postsRoutes);
 
 // TODO: Adicionar nas próximas waves
-// routes.use('/posts', postRoutes);
 // routes.use('/professors', professorRoutes);
 // routes.use('/students', studentRoutes);
 

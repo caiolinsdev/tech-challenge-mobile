@@ -1,12 +1,26 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import * as SecureStore from 'expo-secure-store';
+import Constants from 'expo-constants';
 
 // ==========================================
 // Configuração Base
 // ==========================================
 
-// TODO: Mover para variáveis de ambiente
-const API_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3000/api';
+// Pegar URL da API das configurações do Expo ou usar default
+const getApiUrl = (): string => {
+  // Tentar pegar do extra do app.json
+  const extraApiUrl = Constants.expoConfig?.extra?.apiUrl;
+  if (extraApiUrl) return `${extraApiUrl}/api`;
+  
+  // Tentar pegar de variável de ambiente
+  const envApiUrl = process.env.EXPO_PUBLIC_API_URL;
+  if (envApiUrl) return envApiUrl;
+  
+  // Default para desenvolvimento local
+  return 'http://localhost:3000/api';
+};
+
+const API_URL = getApiUrl();
 
 export const api = axios.create({
   baseURL: API_URL,

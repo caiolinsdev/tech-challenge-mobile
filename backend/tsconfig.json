@@ -2,7 +2,9 @@
   "compilerOptions": {
     "target": "ES2022",
     "module": "CommonJS",
-    "lib": ["ES2022"],
+    "lib": [
+      "ES2022"
+    ],
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
@@ -16,16 +18,35 @@
     "moduleResolution": "node",
     "baseUrl": "./src",
     "paths": {
-      "@/*": ["./*"],
-      "@controllers/*": ["./controllers/*"],
-      "@services/*": ["./services/*"],
-      "@repositories/*": ["./repositories/*"],
-      "@middlewares/*": ["./middlewares/*"],
-      "@routes/*": ["./routes/*"],
-      "@utils/*": ["./utils/*"]
+      "@/*": [
+        "./*"
+      ],
+      "@controllers/*": [
+        "./controllers/*"
+      ],
+      "@services/*": [
+        "./services/*"
+      ],
+      "@repositories/*": [
+        "./repositories/*"
+      ],
+      "@middlewares/*": [
+        "./middlewares/*"
+      ],
+      "@routes/*": [
+        "./routes/*"
+      ],
+      "@utils/*": [
+        "./utils/*"
+      ]
     }
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "extends": "expo/tsconfig.base"
 }
-

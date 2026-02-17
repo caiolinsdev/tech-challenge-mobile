@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -8,106 +8,65 @@ import {
   RefreshControl,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { useAuth } from '../contexts/AuthContext';
+import { usePosts, Post } from '../hooks/usePosts';
+import { useDebounce } from '../hooks/useDebounce';
+import { PostCard, SearchInput, EmptyState, LoadingScreen, LoadingMore } from '../components';
 import { colors } from '../theme/colors';
-import { spacing, borderRadius } from '../theme/spacing';
+import { spacing } from '../theme/spacing';
 import { typography } from '../theme/typography';
 
 // ==========================================
 // Tipos
 // ==========================================
 
-interface Post {
-  id: string;
-  title: string;
-  description: string;
-  author: {
-    name: string;
-  };
-  createdAt: string;
-}
-
-// ==========================================
-// Dados Mock (Temporário)
-// ==========================================
-
-const MOCK_POSTS: Post[] = [
-  {
-    id: '1',
-    title: 'Introdução ao React Native',
-    description: 'Aprenda os conceitos básicos do React Native e como criar seu primeiro aplicativo mobile.',
-    author: { name: 'Prof. João' },
-    createdAt: '2026-02-15T10:30:00Z',
-  },
-  {
-    id: '2',
-    title: 'Docker para Desenvolvedores',
-    description: 'Entenda como containerizar suas aplicações usando Docker e Docker Compose.',
-    author: { name: 'Prof. Maria' },
-    createdAt: '2026-02-14T08:00:00Z',
-  },
-  {
-    id: '3',
-    title: 'PostgreSQL: Boas Práticas',
-    description: 'Dicas e truques para otimizar suas queries e modelar seu banco de dados corretamente.',
-    author: { name: 'Prof. Carlos' },
-    createdAt: '2026-02-13T14:45:00Z',
-  },
-];
-
-// ==========================================
-// Componentes
-// ==========================================
-
-function PostCard({ post, onPress }: { post: Post; onPress: () => void }) {
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: 'short',
-    });
-  };
-
-  return (
-    <TouchableOpacity style={styles.card} onPress={onPress}>
-      <Text style={styles.cardTitle} numberOfLines={2}>
-        {post.title}
-      </Text>
-      <Text style={styles.cardMeta}>
-        {post.author.name} • {formatDate(post.createdAt)}
-      </Text>
-      <Text style={styles.cardDescription} numberOfLines={2}>
-        {post.description}
-      </Text>
-    </TouchableOpacity>
-  );
-}
+type HomeScreenNavigationProp = NativeStackNavigationProp<{
+  Home: undefined;
+  PostDetail: { id: string };
+}>;
 
 // ==========================================
 // Screen
 // ==========================================
 
 export function HomeScreen() {
+  const navigation = useNavigation<HomeScreenNavigationProp>();
   const { isProfessor } = useAuth();
-  const [refreshing, setRefreshing] = React.useState(false);
+  
+  const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearch = useDebounce(searchTerm, 500);
 
-  const handleRefresh = async () => {
-    setRefreshing(true);
-    // TODO: Buscar posts da API
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setRefreshing(false);
-  };
+  const {
+    posts,
+    isLoading,
+    isRefreshing,
+    isLoadingMore,
+    hasMore,
+    refresh,
+    loadMore,
+  } = usePosts({ search: debouncedSearch });
 
   const handlePostPress = (post: Post) => {
-    // TODO: Navegar para tela de detalhes
-    console.log('Post selecionado:', post.id);
+    navigation.navigate('PostDetail', { id: post.id });
   };
+
+  const handleCreatePost = () => {
+    // TODO: Wave 4 - Navegar para criar post
+    console.log('Criar novo post');
+  };
+
+  // Loading inicial
+  if (isLoading) {
+    return <LoadingScreen message="Carregando posts..." />;
+  }
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
       <FlatList
-        data={MOCK_POSTS}
+        data={posts}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <PostCard post={item} onPress={() => handlePostPress(item)} />
@@ -116,37 +75,50 @@ export function HomeScreen() {
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
-            refreshing={refreshing}
-            onRefresh={handleRefresh}
+            refreshing={isRefreshing}
+            onRefresh={refresh}
             tintColor={colors.primary[500]}
             colors={[colors.primary[500]]}
           />
         }
+        onEndReached={loadMore}
+        onEndReachedThreshold={0.5}
         ListHeaderComponent={
           <View style={styles.header}>
-            <Text style={styles.headerTitle}>Posts Recentes</Text>
-            <Text style={styles.headerSubtitle}>
-              {MOCK_POSTS.length} posts encontrados
-            </Text>
+            <SearchInput
+              value={searchTerm}
+              onChangeText={setSearchTerm}
+              placeholder="🔍 Buscar posts..."
+            />
+            <View style={styles.headerInfo}>
+              <Text style={styles.headerTitle}>
+                {debouncedSearch ? 'Resultados da busca' : 'Posts Recentes'}
+              </Text>
+              <Text style={styles.headerSubtitle}>
+                {posts.length} post{posts.length !== 1 ? 's' : ''} encontrado{posts.length !== 1 ? 's' : ''}
+              </Text>
+            </View>
           </View>
         }
         ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyIcon}>📭</Text>
-            <Text style={styles.emptyText}>Nenhum post encontrado</Text>
-          </View>
+          <EmptyState
+            icon="📭"
+            title="Nenhum post encontrado"
+            description={
+              debouncedSearch
+                ? 'Tente buscar por outro termo'
+                : 'Ainda não há posts publicados'
+            }
+          />
+        }
+        ListFooterComponent={
+          isLoadingMore && hasMore ? <LoadingMore /> : null
         }
       />
 
       {/* FAB - Apenas para professores */}
       {isProfessor && (
-        <TouchableOpacity
-          style={styles.fab}
-          onPress={() => {
-            // TODO: Navegar para criar post
-            console.log('Criar novo post');
-          }}
-        >
+        <TouchableOpacity style={styles.fab} onPress={handleCreatePost}>
           <Text style={styles.fabIcon}>+</Text>
         </TouchableOpacity>
       )}
@@ -168,7 +140,10 @@ const styles = StyleSheet.create({
     paddingBottom: 100,
   },
   header: {
-    marginBottom: spacing.lg,
+    marginBottom: spacing.md,
+  },
+  headerInfo: {
+    marginTop: spacing.sm,
   },
   headerTitle: {
     ...typography.h3,
@@ -179,47 +154,13 @@ const styles = StyleSheet.create({
     color: colors.text.secondary,
     marginTop: spacing.xs,
   },
-  card: {
-    backgroundColor: colors.background.card,
-    borderRadius: borderRadius.lg,
-    padding: spacing.cardPadding,
-    marginBottom: spacing.md,
-    borderWidth: 1,
-    borderColor: colors.gray[800],
-  },
-  cardTitle: {
-    ...typography.h4,
-    color: colors.text.primary,
-    marginBottom: spacing.xs,
-  },
-  cardMeta: {
-    ...typography.labelSmall,
-    color: colors.text.tertiary,
-    marginBottom: spacing.sm,
-  },
-  cardDescription: {
-    ...typography.body,
-    color: colors.text.secondary,
-  },
-  emptyContainer: {
-    alignItems: 'center',
-    paddingVertical: spacing['3xl'],
-  },
-  emptyIcon: {
-    fontSize: 48,
-    marginBottom: spacing.md,
-  },
-  emptyText: {
-    ...typography.body,
-    color: colors.text.secondary,
-  },
   fab: {
     position: 'absolute',
     bottom: spacing.xl,
     right: spacing.xl,
     width: 56,
     height: 56,
-    borderRadius: borderRadius.full,
+    borderRadius: 28,
     backgroundColor: colors.primary[500],
     justifyContent: 'center',
     alignItems: 'center',
@@ -235,4 +176,3 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-

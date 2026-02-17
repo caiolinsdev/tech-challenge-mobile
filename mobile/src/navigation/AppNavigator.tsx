@@ -10,6 +10,7 @@ import { colors } from '../theme/colors';
 // Screens
 import { LoginScreen } from '../screens/LoginScreen';
 import { HomeScreen } from '../screens/HomeScreen';
+import { PostDetailScreen } from '../screens/PostDetailScreen';
 import { ProfileScreen } from '../screens/ProfileScreen';
 
 // ==========================================
@@ -26,8 +27,13 @@ export type AuthStackParamList = {
 };
 
 export type MainTabParamList = {
-  Home: undefined;
+  HomeStack: undefined;
   Profile: undefined;
+};
+
+export type HomeStackParamList = {
+  Home: undefined;
+  PostDetail: { id: string };
 };
 
 // ==========================================
@@ -37,6 +43,7 @@ export type MainTabParamList = {
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 const MainTab = createBottomTabNavigator<MainTabParamList>();
+const HomeStack = createNativeStackNavigator<HomeStackParamList>();
 
 // ==========================================
 // Auth Navigator
@@ -56,6 +63,41 @@ function AuthNavigator() {
 }
 
 // ==========================================
+// Home Stack Navigator
+// ==========================================
+
+function HomeStackNavigator() {
+  return (
+    <HomeStack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: colors.background.secondary,
+        },
+        headerTintColor: colors.text.primary,
+        headerTitleStyle: {
+          fontWeight: '600',
+        },
+      }}
+    >
+      <HomeStack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          title: 'Posts',
+        }}
+      />
+      <HomeStack.Screen
+        name="PostDetail"
+        component={PostDetailScreen}
+        options={{
+          title: 'Post',
+        }}
+      />
+    </HomeStack.Navigator>
+  );
+}
+
+// ==========================================
 // Main Tab Navigator
 // ==========================================
 
@@ -63,10 +105,7 @@ function MainNavigator() {
   return (
     <MainTab.Navigator
       screenOptions={{
-        headerStyle: {
-          backgroundColor: colors.background.secondary,
-        },
-        headerTintColor: colors.text.primary,
+        headerShown: false,
         tabBarStyle: {
           backgroundColor: colors.background.secondary,
           borderTopColor: colors.gray[800],
@@ -76,12 +115,16 @@ function MainNavigator() {
       }}
     >
       <MainTab.Screen
-        name="Home"
-        component={HomeScreen}
+        name="HomeStack"
+        component={HomeStackNavigator}
         options={{
           title: 'Posts',
           tabBarLabel: 'Posts',
-          // TODO: Adicionar ícones
+          tabBarIcon: ({ color }) => (
+            <View style={styles.tabIcon}>
+              <View style={[styles.iconPlaceholder, { backgroundColor: color }]} />
+            </View>
+          ),
         }}
       />
       <MainTab.Screen
@@ -90,7 +133,16 @@ function MainNavigator() {
         options={{
           title: 'Perfil',
           tabBarLabel: 'Perfil',
-          // TODO: Adicionar ícones
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: colors.background.secondary,
+          },
+          headerTintColor: colors.text.primary,
+          tabBarIcon: ({ color }) => (
+            <View style={styles.tabIcon}>
+              <View style={[styles.iconPlaceholder, { backgroundColor: color }]} />
+            </View>
+          ),
         }}
       />
     </MainTab.Navigator>
@@ -137,5 +189,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.background.primary,
   },
+  tabIcon: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconPlaceholder: {
+    width: 20,
+    height: 20,
+    borderRadius: 4,
+  },
 });
-
