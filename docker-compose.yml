@@ -47,32 +47,6 @@ services:
       - /app/node_modules
     command: npm run dev
 
-  # ========================================
-  # React Native Mobile (Expo)
-  # ========================================
-  mobile:
-    build:
-      context: ./mobile
-      dockerfile: Dockerfile
-    container_name: blog_mobile
-    stdin_open: true
-    tty: true
-    ports:
-      - "8081:8081"
-      - "19000:19000"
-      - "19001:19001"
-      - "19002:19002"
-    environment:
-      - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
-      - REACT_NATIVE_PACKAGER_HOSTNAME=${HOST_IP:-localhost}
-      - API_URL=http://api:3000
-    volumes:
-      - ./mobile:/app
-      - /app/node_modules
-    depends_on:
-      - api
-    # Use --lan para rede local ou --tunnel para acesso remoto
-    command: npx expo start --lan --non-interactive
 
 volumes:
   postgres_data:
