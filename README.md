@@ -233,18 +233,6 @@ Após rodar o seed, use essas credenciais para testar:
 
 ---
 
-## 📱 Screenshots
-
-_Adicione screenshots das telas principais aqui._
-
----
-
-## 🎥 Vídeo de Apresentação
-
-_Vídeo de demonstração (máx. 15 min) a ser gravado pela equipe._
-
----
-
 ## 📄 Licença
 
 Este projeto está sob a licença MIT.
